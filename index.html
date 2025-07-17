@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI微习惯工具箱 - 基于福格行为设计</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 10px;
+        }
+
+        .page {
+            display: none;
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin: 20px 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            color: #4a5568;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1.8em;
+        }
+
+        h2 {
+            color: #2d3748;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #718096;
+            margin-bottom: 25px;
+            font-size: 0.9em;
+        }
+
+        .tip-box {
+            background: #f7fafc;
+            border-left: 4px solid #4299e1;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 8px;
+            font-size: 0.9em;
+        }
+
+        .tip-box h3 {
+            color: #2b6cb0;
+            margin-bottom: 10px;
+            font-size: 1em;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #4a5568;
+        }
+
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus, textarea:focus {
+            outline: none;
+            border-color: #4299e1;
+        }
+
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 20px auto;
+            min-width: 150px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+
+        .btn-small {
+            padding: 8px 16px;
+            font-size: 14px;
+            margin: 5px;
+            display: inline-block;
+        }
+
+        .behavior-item {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 15px;
+            margin: 10px 0;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .behavior-item:hover {
+            border-color: #4299e1;
+            transform: translateY(-2px);
+        }
+
+        .behavior-item.selected {
+            border-color: #48bb78;
+            background: #f0fff4;
+        }
+
+        .behavior-header {
+            margin-bottom: 8px;
+        }
+
+        .behavior-tag {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-size: 11px;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-weight: 500;
+        }
+
+        .behavior-text {
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .behavior-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .checkbox-btn {
+            background: #e2e8f0;
+            color: #4a5568;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .checkbox-btn.selected {
+            background: #48bb78;
+            color: white;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 3px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.5s ease;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #718096;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #4299e1;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .final-recipe {
+            background: #f0fff4;
+            border: 2px solid #48bb78;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+
+        .final-recipe h3 {
+            color: #2f855a;
+            margin-bottom: 15px;
+        }
+
+        .recipe-formula {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-weight: 500;
+            border-left: 4px solid #48bb78;
+        }
+
+        .count-indicator {
+            background: #4299e1;
+            color: white;
+            border-radius: 20px;
+            padding: 5px 12px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .example-list {
+            background: #fffaf0;
+            border: 1px solid #fed7aa;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+        }
+
+        .example-list ul {
+            margin-left: 20px;
+        }
+
+        .example-list li {
+            margin-bottom: 5px;
+            color: #92400e;
+        }
+
+        .anchor-option, .celebration-option {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 12px;
+            margin: 8px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .anchor-option:hover, .celebration-option:hover {
+            border-color: #4299e1;
+        }
+
+        .anchor-option.selected, .celebration-option.selected {
+            border-color: #48bb78;
+            background: #f0fff4;
+        }
+
+        .options-container {
+            max-height: 300px;
+            overflow-y: auto;
+            margin: 15px 0;
+        }
+
+        .floating-controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: white;
+            border-radius: 20px;
+            padding: 15px 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            border: 2px solid #4299e1;
+            z-index: 1000;
+            display: none;
+        }
+
+        .floating-controls.show {
+            display: block;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .floating-count {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+
+        .floating-progress {
+            width: 200px;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+
+        .floating-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.5s ease;
+        }
+
+        .floating-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .floating-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .floating-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 5px;
+            }
+
+            .page {
+                margin: 10px 5px;
+                padding: 20px;
+                padding-bottom: 120px; /* 为浮动控件留出空间 */
+            }
+
+            h1 {
+                font-size: 1.5em;
+            }
+
+            h2 {
+                font-size: 1.2em;
+            }
+
+            .navigation {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .behavior-buttons {
+                flex-direction: column;
+            }
+
+            .checkbox-btn {
+                width: 100%;
+            }
+
+            .floating-controls {
+                left: 10px;
+                right: 10px;
+                bottom: 10px;
+            }
+
+            .floating-progress {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 第一页：欢迎页面和愿望输入 -->
+        <div class="page active" id="page-1">
+            <h1>🌟 AI微习惯工具箱</h1>
+            <div class="subtitle">基于福格行为设计模型 - 科学养成好习惯</div>
+            
+            <div class="tip-box">
+                <h3>💡 什么是有效愿望？</h3>
+                <p><strong>有效愿望应该：</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>具体明确，不要过于抽象</li>
+                    <li>是你真正想要的，而不是你觉得"应该"要的</li>
+                    <li>可以通过具体行为来实现</li>
+                    <li>对你有意义，能激发你的动机</li>
+                </ul>
+            </div>
+
+            <div class="example-list">
+                <h3>✅ 有效愿望示例：</h3>
+                <ul>
+                    <li>提高睡眠质量</li>
+                    <li>增强身体健康</li>
+                    <li>提升学习效率</li>
+                    <li>改善家庭关系</li>
+                    <li>减少焦虑情绪</li>
+                    <li>提高工作专注力</li>
+                </ul>
+            </div>
+
+            <div class="input-group">
+                <label for="wishInput">请输入你的愿望：</label>
+                <textarea 
+                    id="wishInput" 
+                    placeholder="例如：我想提高睡眠质量，让自己每天都精力充沛..."
+                    maxlength="200"
+                ></textarea>
+                <small style="color: #718096;">建议20-200字，描述你真正想要实现的愿望</small>
+            </div>
+
+            <button class="btn" onclick="startBehaviorGeneration()">
+                开始生成行为方案 🚀
+            </button>
+        </div>
+
+        <!-- 第二页：行为选择页面 -->
+        <div class="page" id="page-2">
+            <h2>第一步：选择你愿意做的行为</h2>
+            <div class="subtitle">AI根据你的愿望生成了以下行为建议，选择你愿意尝试的（至少选择10个）</div>
+            
+            <div class="tip-box">
+                <h3>💡 选择标准</h3>
+                <p>以下每个行为都是为了帮助你实现"<strong><span id="currentWish"></span></strong>"这个愿望而精心设计的。请选择那些你觉得：</p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>真正想要尝试的行为</li>
+                    <li>觉得对实现愿望有帮助的行为</li>
+                    <li>符合你生活方式的行为</li>
+                </ul>
+            </div>
+            
+            <div class="count-indicator">
+                已选择：<span id="willingCount">0</span> / 10个（最少）
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill1" style="width: 0%"></div>
+            </div>
+
+            <div id="behaviorsContainer">
+                <!-- 行为选项将通过JavaScript动态生成 -->
+            </div>
+
+            <div class="navigation">
+                <button class="btn btn-secondary" onclick="goToPage(1)">返回上一步</button>
+                <button class="btn btn-small" onclick="loadMoreBehaviors()">加载更多选项</button>
+                <button class="btn" onclick="proceedToAbility()" id="proceedBtn1" disabled>
+                    进入下一步
+                </button>
+            </div>
+        </div>
+
+        <!-- 第三页：能力筛选页面 -->
+        <div class="page" id="page-3">
+            <h2>第二步：选择你能做到的行为</h2>
+            <div class="subtitle">从你刚才选择的行为中，选出你确实有能力完成的</div>
+            
+            <div class="tip-box">
+                <h3>💪 能力评估维度：</h3>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li><strong>时间：</strong>你是否有足够的时间？</li>
+                    <li><strong>资金：</strong>你是否有足够的资金？</li>
+                    <li><strong>体力：</strong>你是否有足够的体力？</li>
+                    <li><strong>脑力：</strong>这个行为是否需要许多创意和脑力？</li>
+                    <li><strong>日程：</strong>这个行为符合你现在的日程吗？</li>
+                </ul>
+            </div>
+
+            <div class="count-indicator">
+                已选择：<span id="ableCount">0</span> 个黄金行为
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill2" style="width: 0%"></div>
+            </div>
+
+            <div id="abilityContainer">
+                <!-- 能力筛选选项将通过JavaScript动态生成 -->
+            </div>
+
+            <div class="navigation">
+                <button class="btn btn-secondary" onclick="goToPage(2)">返回上一步</button>
+                <button class="btn" onclick="proceedToRecipe()" id="proceedBtn2" disabled>
+                    生成习惯配方
+                </button>
+            </div>
+        </div>
+
+        <!-- 第四页：配方生成页面 -->
+        <div class="page" id="page-4">
+            <h2>第三步：为你的黄金行为生成习惯配方</h2>
+            <div class="subtitle">根据福格行为设计模型，为每个黄金行为定制专属配方</div>
+            
+            <div class="tip-box">
+                <h3>🎯 微习惯配方公式：</h3>
+                <p><strong>在我[锚点]之后，我会[微行为]，为了让大脑牢记这个习惯，我会[庆祝]。</strong></p>
+            </div>
+
+            <div id="recipeContainer">
+                <!-- 配方将通过JavaScript动态生成 -->
+            </div>
+
+            <div class="navigation">
+                <button class="btn btn-secondary" onclick="goToPage(3)">返回上一步</button>
+                <button class="btn" onclick="proceedToFinal()">
+                    生成最终方案
+                </button>
+            </div>
+        </div>
+
+        <!-- 第五页：最终结果页面 -->
+        <div class="page" id="page-5">
+            <h1>🎉 你的微习惯养成方案</h1>
+            <div class="subtitle">为了实现：<span id="finalWish"></span></div>
+            
+            <div class="tip-box">
+                <h3>🌟 使用说明：</h3>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>每天按照配方执行，不要给自己太大压力</li>
+                    <li>完成后立即庆祝，创造积极情绪</li>
+                    <li>如果某天没做到，不要自责，第二天继续</li>
+                    <li>习惯养成后，可以逐渐增加难度</li>
+                </ul>
+            </div>
+
+            <div id="finalRecipeContainer">
+                <!-- 最终配方将通过JavaScript动态生成 -->
+            </div>
+
+            <div class="navigation">
+                <button class="btn btn-secondary" onclick="goToPage(4)">返回修改</button>
+                <button class="btn" onclick="restartProcess()">
+                    重新开始
+                </button>
+            </div>
+        </div>
+
+        <!-- 加载页面 -->
+        <div class="page" id="loading-page">
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>AI正在为你生成个性化行为方案...</p>
+                <p style="font-size: 0.9em; color: #718096; margin-top: 10px;">
+                    这可能需要几秒钟时间
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 浮动控件 -->
+    <div class="floating-controls" id="floatingControls">
+        <div class="floating-count" id="floatingCount">已选择：0 / 10个</div>
+        <div class="floating-progress">
+            <div class="floating-progress-fill" id="floatingProgressFill" style="width: 0%"></div>
+        </div>
+        <button class="floating-btn" id="floatingNextBtn" disabled onclick="proceedToNext()">
+            进入下一步
+        </button>
+    </div>
+
+    <script>
+        // 全局变量
+        let currentPage = 1;
+        let userWish = '';
+        let allBehaviors = [];
+        let selectedWillingBehaviors = [];
+        let selectedAbleBehaviors = [];
+        let finalRecipes = [];
+        let currentBehaviorPage = 0;
+        const behaviorsPerPage = 10;
+
+
+
+        // 显示加载页面
+        function showLoading() {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById('loading-page').classList.add('active');
+        }
+
+        // 模拟与DeepSeek API的交互（实际使用时需要连接真实API）
+        async function callDeepSeekAPI(prompt, type = 'behaviors') {
+            // 模拟API调用延迟
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            
+            // 如果配置文件中的API函数可用，使用它
+            if (typeof CONFIG !== 'undefined' && typeof getBackupData === 'function') {
+                return getBackupData(type, prompt);
+            }
+            
+            // 否则使用本地模拟函数
+            if (type === 'behaviors') {
+                return generateMockBehaviors(prompt);
+            } else if (type === 'anchors') {
+                return generateMockAnchors();
+            } else if (type === 'celebrations') {
+                return generateMockCelebrations();
+            }
+        }
+
+        // 生成模拟行为数据
+        function generateMockBehaviors(wish) {
+            const behaviorTemplates = [
+                "每天早上起床后立即喝一杯温水",
+                "每次使用手机前先深呼吸3次",
+                "每天晚上睡前写下3件感恩的事情",
+                "每次坐下工作前整理一下桌面",
+                "每天中午吃饭前做2分钟拉伸",
+                "每次洗手后照镜子对自己微笑",
+                "每天睡前读书5分钟",
+                "每次进门后立即换拖鞋",
+                "每天早上出门前检查天气",
+                "每次吃完饭后立即刷牙",
+                "每天晚上10点后关闭所有电子设备",
+                "每次感到压力时做5次深呼吸",
+                "每天早上起床后做5个俯卧撑",
+                "每次开会前准备一杯茶",
+                "每天晚上洗脸后涂护肤品",
+                "每次坐电梯时练习正确站姿",
+                "每天睡前整理明天的衣服",
+                "每次饭后散步10分钟",
+                "每天早上起床后开窗通风",
+                "每次工作休息时眺望远方30秒",
+                "每天晚上睡前关闭房间所有灯光",
+                "每次购物前列一个清单",
+                "每天起床后立即铺床",
+                "每次洗澡后称体重",
+                "每天中午休息时听5分钟轻音乐",
+                "每次使用电脑前调整坐姿",
+                "每天晚上睡前放下手机",
+                "每次等电梯时做脚踝运动",
+                "每天早上起床后拉开窗帘",
+                "每次吃饭前说一句感谢",
+            ];
+            
+            // 随机选择和打乱顺序
+            return behaviorTemplates.sort(() => Math.random() - 0.5);
+        }
+
+        // 生成模拟锚点数据
+        function generateMockAnchors() {
+            return [
+                "在我起床下床之后",
+                "在我刷完牙之后",
+                "在我洗完脸之后",
+                "在我穿好衣服之后",
+                "在我吃完早餐之后",
+                "在我坐到办公桌前之后",
+                "在我打开电脑之后",
+                "在我吃完午餐之后",
+                "在我下班回家之后",
+                "在我放下包之后",
+                "在我换好拖鞋之后",
+                "在我洗完澡之后",
+                "在我躺到床上之后",
+                "在我关灯之后",
+                "在我喝完水之后",
+                "在我上完厕所之后",
+                "在我锁好门之后",
+                "在我坐下来之后",
+                "在我站起来之后",
+                "在我接完电话之后"
+            ];
+        }
+
+        // 生成模拟庆祝数据
+        function generateMockCelebrations() {
+            return [
+                "在心里说'太棒了！'",
+                "微笑并点头",
+                "握拳做胜利手势",
+                "深呼吸一次",
+                "给自己点个赞",
+                "在心里说'我做到了！'",
+                "轻轻拍拍自己的肩膀",
+                "闭眼感受成就感3秒",
+                "在心里哼一首喜欢的歌",
+                "想象朋友为我鼓掌",
+                "做一个开心的表情",
+                "在心里说'又进步了一点！'",
+                "轻轻跳一下",
+                "做一个'V'字手势",
+                "在心里说'我很棒！'",
+                "想象看到烟花绽放",
+                "打个响指",
+                "在心里说'继续保持！'",
+                "做一个得意的笑容",
+                "在心里说'我值得为此骄傲！'"
+            ];
+        }
+
+        // 开始生成行为方案
+        async function startBehaviorGeneration() {
+            const wishInput = document.getElementById('wishInput').value.trim();
+            
+            if (!wishInput) {
+                alert('请输入你的愿望！');
+                return;
+            }
+
+            if (wishInput.length < 10) {
+                alert('愿望描述太简单了，请详细描述一下你想要实现的愿望。');
+                return;
+            }
+
+            userWish = wishInput;
+            showLoading();
+
+            try {
+                // 调用AI生成行为方案
+                allBehaviors = await callDeepSeekAPI(userWish, 'behaviors');
+                currentBehaviorPage = 0;
+                selectedWillingBehaviors = [];
+                
+                        // 显示行为选择页面
+        displayBehaviors();
+        // 在第二页显示用户愿望
+        document.getElementById('currentWish').textContent = userWish;
+        goToPage(2);
+            } catch (error) {
+                console.error('生成行为方案失败:', error);
+                alert('生成方案失败，请重试');
+                goToPage(1);
+            }
+        }
+
+        // 显示行为选择
+        function displayBehaviors() {
+            const container = document.getElementById('behaviorsContainer');
+            const startIndex = currentBehaviorPage * behaviorsPerPage;
+            const endIndex = startIndex + behaviorsPerPage;
+            const behaviorsBatch = allBehaviors.slice(startIndex, endIndex);
+
+            if (currentBehaviorPage === 0) {
+                container.innerHTML = '';
+            }
+
+                    behaviorsBatch.forEach((behavior, index) => {
+            const behaviorDiv = document.createElement('div');
+            behaviorDiv.className = 'behavior-item';
+            behaviorDiv.innerHTML = `
+                <div class="behavior-header">
+                    <span class="behavior-tag">🎯 为你的愿望定制</span>
+                </div>
+                <div class="behavior-text">${behavior}</div>
+                <div class="behavior-buttons">
+                    <button class="checkbox-btn" onclick="toggleWillingBehavior(${startIndex + index}, this)">
+                        我愿意做
+                    </button>
+                </div>
+            `;
+            container.appendChild(behaviorDiv);
+        });
+
+            updateWillingCount();
+        }
+
+        // 切换愿意做的行为
+        function toggleWillingBehavior(index, button) {
+            const behavior = allBehaviors[index];
+            const behaviorItem = button.closest('.behavior-item');
+            
+            if (selectedWillingBehaviors.includes(behavior)) {
+                selectedWillingBehaviors = selectedWillingBehaviors.filter(b => b !== behavior);
+                button.classList.remove('selected');
+                behaviorItem.classList.remove('selected');
+            } else {
+                selectedWillingBehaviors.push(behavior);
+                button.classList.add('selected');
+                behaviorItem.classList.add('selected');
+            }
+            
+            updateWillingCount();
+        }
+
+        // 更新愿意做的行为计数
+        function updateWillingCount() {
+            const count = selectedWillingBehaviors.length;
+            document.getElementById('willingCount').textContent = count;
+            
+            const progress = Math.min(count / 10 * 100, 100);
+            document.getElementById('progressFill1').style.width = progress + '%';
+            
+            const proceedBtn = document.getElementById('proceedBtn1');
+            if (count >= 10) {
+                proceedBtn.disabled = false;
+            } else {
+                proceedBtn.disabled = true;
+            }
+
+            // 更新浮动控件
+            updateFloatingControls('willing', count, progress, count >= 10);
+        }
+
+        // 加载更多行为选项
+        function loadMoreBehaviors() {
+            if ((currentBehaviorPage + 1) * behaviorsPerPage < allBehaviors.length) {
+                currentBehaviorPage++;
+                displayBehaviors();
+            } else {
+                alert('已显示所有行为选项');
+            }
+        }
+
+        // 进入能力筛选阶段
+        function proceedToAbility() {
+            if (selectedWillingBehaviors.length < 10) {
+                alert('请至少选择10个你愿意做的行为');
+                return;
+            }
+
+            displayAbilitySelection();
+            goToPage(3);
+        }
+
+        // 显示能力筛选
+        function displayAbilitySelection() {
+            const container = document.getElementById('abilityContainer');
+            container.innerHTML = '';
+
+            selectedWillingBehaviors.forEach((behavior, index) => {
+                const behaviorDiv = document.createElement('div');
+                behaviorDiv.className = 'behavior-item';
+                behaviorDiv.innerHTML = `
+                    <div class="behavior-header">
+                        <span class="behavior-tag">✅ 你愿意做的行为</span>
+                    </div>
+                    <div class="behavior-text">${behavior}</div>
+                    <div class="behavior-buttons">
+                        <button class="checkbox-btn" onclick="toggleAbleBehavior(${index}, this)">
+                            我能做到
+                        </button>
+                    </div>
+                `;
+                container.appendChild(behaviorDiv);
+            });
+
+            selectedAbleBehaviors = [];
+            updateAbleCount();
+        }
+
+        // 切换能做到的行为
+        function toggleAbleBehavior(index, button) {
+            const behavior = selectedWillingBehaviors[index];
+            const behaviorItem = button.closest('.behavior-item');
+            
+            if (selectedAbleBehaviors.includes(behavior)) {
+                selectedAbleBehaviors = selectedAbleBehaviors.filter(b => b !== behavior);
+                button.classList.remove('selected');
+                behaviorItem.classList.remove('selected');
+            } else {
+                selectedAbleBehaviors.push(behavior);
+                button.classList.add('selected');
+                behaviorItem.classList.add('selected');
+            }
+            
+            updateAbleCount();
+        }
+
+        // 更新能做到的行为计数
+        function updateAbleCount() {
+            const count = selectedAbleBehaviors.length;
+            document.getElementById('ableCount').textContent = count;
+            
+            const progress = count / selectedWillingBehaviors.length * 100;
+            document.getElementById('progressFill2').style.width = progress + '%';
+            
+            const proceedBtn = document.getElementById('proceedBtn2');
+            if (count > 0) {
+                proceedBtn.disabled = false;
+            } else {
+                proceedBtn.disabled = true;
+            }
+
+            // 更新浮动控件
+            updateFloatingControls('able', count, progress, count > 0);
+        }
+
+        // 进入配方生成阶段
+        async function proceedToRecipe() {
+            if (selectedAbleBehaviors.length === 0) {
+                alert('请至少选择一个你能做到的行为');
+                return;
+            }
+
+            showLoading();
+
+            try {
+                // 生成锚点和庆祝选项
+                const anchors = await callDeepSeekAPI('', 'anchors');
+                const celebrations = await callDeepSeekAPI('', 'celebrations');
+                
+                await displayRecipeGeneration(anchors, celebrations);
+                goToPage(4);
+            } catch (error) {
+                console.error('生成配方失败:', error);
+                alert('生成配方失败，请重试');
+                goToPage(3);
+            }
+        }
+
+        // 显示配方生成
+        async function displayRecipeGeneration(anchors, celebrations) {
+            const container = document.getElementById('recipeContainer');
+            container.innerHTML = '';
+
+            finalRecipes = [];
+
+            for (let i = 0; i < selectedAbleBehaviors.length; i++) {
+                const behavior = selectedAbleBehaviors[i];
+                const recipeDiv = document.createElement('div');
+                recipeDiv.className = 'final-recipe';
+                recipeDiv.innerHTML = `
+                    <h3>黄金行为 ${i + 1}：${behavior}</h3>
+                    
+                    <div style="margin: 15px 0;">
+                        <label style="font-weight: 600; margin-bottom: 10px; display: block;">选择锚点（在...之后）：</label>
+                        <div class="options-container" id="anchors-${i}">
+                            ${getInitialAnchors(behavior, anchors).map((anchor, j) => `
+                                <div class="anchor-option" onclick="selectAnchor(${i}, ${j}, '${anchor}')">
+                                    ${anchor}
+                                </div>
+                            `).join('')}
+                        </div>
+                        <button class="btn btn-small" onclick="refreshAnchors(${i})">更换锚点选项</button>
+                    </div>
+
+                    <div style="margin: 15px 0;">
+                        <label style="font-weight: 600; margin-bottom: 10px; display: block;">选择庆祝方式（我会...）：</label>
+                        <div class="options-container" id="celebrations-${i}">
+                            ${getInitialCelebrations(behavior, celebrations).map((celebration, j) => `
+                                <div class="celebration-option" onclick="selectCelebration(${i}, ${j}, '${celebration}')">
+                                    ${celebration}
+                                </div>
+                            `).join('')}
+                        </div>
+                        <button class="btn btn-small" onclick="refreshCelebrations(${i})">更换庆祝选项</button>
+                    </div>
+
+                    <div class="recipe-formula" id="formula-${i}">
+                        <strong>配方：</strong><span id="recipe-text-${i}">请选择锚点和庆祝方式</span>
+                    </div>
+                `;
+                container.appendChild(recipeDiv);
+
+                // 初始化配方对象
+                finalRecipes.push({
+                    behavior: behavior,
+                    anchor: '',
+                    celebration: ''
+                });
+            }
+
+            // 存储锚点和庆祝选项以备刷新使用
+            window.currentAnchors = anchors;
+            window.currentCelebrations = celebrations;
+        }
+
+        // 选择锚点
+        function selectAnchor(recipeIndex, anchorIndex, anchor) {
+            // 清除之前的选择
+            document.querySelectorAll(`#anchors-${recipeIndex} .anchor-option`).forEach(el => {
+                el.classList.remove('selected');
+            });
+            
+            // 选择新的锚点
+            document.querySelector(`#anchors-${recipeIndex} .anchor-option:nth-child(${anchorIndex + 1})`).classList.add('selected');
+            
+            finalRecipes[recipeIndex].anchor = anchor;
+            updateRecipeFormula(recipeIndex);
+        }
+
+        // 选择庆祝方式
+        function selectCelebration(recipeIndex, celebrationIndex, celebration) {
+            // 清除之前的选择
+            document.querySelectorAll(`#celebrations-${recipeIndex} .celebration-option`).forEach(el => {
+                el.classList.remove('selected');
+            });
+            
+            // 选择新的庆祝方式
+            document.querySelector(`#celebrations-${recipeIndex} .celebration-option:nth-child(${celebrationIndex + 1})`).classList.add('selected');
+            
+            finalRecipes[recipeIndex].celebration = celebration;
+            updateRecipeFormula(recipeIndex);
+        }
+
+        // 更新配方公式
+        function updateRecipeFormula(recipeIndex) {
+            const recipe = finalRecipes[recipeIndex];
+            const formulaEl = document.getElementById(`recipe-text-${recipeIndex}`);
+            
+            if (recipe.anchor && recipe.celebration) {
+                formulaEl.innerHTML = `${recipe.anchor}，我会<strong>${recipe.behavior}</strong>，为了让大脑牢记这个习惯，我会<strong>${recipe.celebration}</strong>。`;
+            } else if (recipe.anchor) {
+                formulaEl.innerHTML = `${recipe.anchor}，我会<strong>${recipe.behavior}</strong>，为了让大脑牢记这个习惯，我会<strong>[请选择庆祝方式]</strong>。`;
+            } else if (recipe.celebration) {
+                formulaEl.innerHTML = `<strong>[请选择锚点]</strong>，我会<strong>${recipe.behavior}</strong>，为了让大脑牢记这个习惯，我会<strong>${recipe.celebration}</strong>。`;
+            }
+        }
+
+        // 刷新锚点选项
+        async function refreshAnchors(recipeIndex) {
+            try {
+                // 先显示加载状态
+                const container = document.getElementById(`anchors-${recipeIndex}`);
+                container.innerHTML = '<div style="text-align: center; padding: 20px; color: #718096;">正在生成新的锚点选项...</div>';
+                
+                // 获取黄金行为用于生成针对性锚点
+                const currentBehavior = finalRecipes[recipeIndex].behavior;
+                const anchors = await callDeepSeekAPI(currentBehavior, 'anchors');
+                
+                // 使用智能匹配获取针对性锚点
+                let availableAnchors;
+                if (typeof getBackupDataSmart === 'function') {
+                    availableAnchors = getBackupDataSmart('anchors', '', currentBehavior);
+                } else {
+                    availableAnchors = anchors;
+                }
+                
+                // 随机打乱并选择5个
+                const shuffled = availableAnchors.sort(() => 0.5 - Math.random());
+                const selectedAnchors = shuffled.slice(0, 5);
+                
+                container.innerHTML = selectedAnchors.map((anchor, j) => `
+                    <div class="anchor-option" onclick="selectAnchor(${recipeIndex}, ${j}, '${anchor}')">
+                        ${anchor}
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('刷新锚点失败:', error);
+                // 使用备用锚点
+                const backupAnchors = [
+                    "在我起床下床之后", "在我刷完牙之后", "在我洗完脸之后", 
+                    "在我吃完早餐之后", "在我打开电脑之后"
+                ];
+                const container = document.getElementById(`anchors-${recipeIndex}`);
+                container.innerHTML = backupAnchors.map((anchor, j) => `
+                    <div class="anchor-option" onclick="selectAnchor(${recipeIndex}, ${j}, '${anchor}')">
+                        ${anchor}
+                    </div>
+                `).join('');
+            }
+        }
+
+        // 刷新庆祝选项
+        async function refreshCelebrations(recipeIndex) {
+            try {
+                // 先显示加载状态
+                const container = document.getElementById(`celebrations-${recipeIndex}`);
+                container.innerHTML = '<div style="text-align: center; padding: 20px; color: #718096;">正在生成新的庆祝选项...</div>';
+                
+                // 获取黄金行为用于生成针对性庆祝
+                const currentBehavior = finalRecipes[recipeIndex].behavior;
+                const celebrations = await callDeepSeekAPI(currentBehavior, 'celebrations');
+                
+                // 使用智能匹配获取针对性庆祝方式
+                let availableCelebrations;
+                if (typeof getBackupDataSmart === 'function') {
+                    availableCelebrations = getBackupDataSmart('celebrations', '', currentBehavior);
+                } else {
+                    availableCelebrations = celebrations;
+                }
+                
+                // 随机打乱并选择5个
+                const shuffled = availableCelebrations.sort(() => 0.5 - Math.random());
+                const selectedCelebrations = shuffled.slice(0, 5);
+                
+                container.innerHTML = selectedCelebrations.map((celebration, j) => `
+                    <div class="celebration-option" onclick="selectCelebration(${recipeIndex}, ${j}, '${celebration}')">
+                        ${celebration}
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('刷新庆祝方式失败:', error);
+                // 使用备用庆祝方式
+                const backupCelebrations = [
+                    "在心里说'太棒了！'", "微笑并点头", "握拳做胜利手势", 
+                    "深呼吸一次", "给自己点个赞"
+                ];
+                const container = document.getElementById(`celebrations-${recipeIndex}`);
+                container.innerHTML = backupCelebrations.map((celebration, j) => `
+                    <div class="celebration-option" onclick="selectCelebration(${recipeIndex}, ${j}, '${celebration}')">
+                        ${celebration}
+                    </div>
+                `).join('');
+            }
+        }
+
+        // 进入最终结果页面
+        function proceedToFinal() {
+            // 检查是否所有配方都已完成
+            const incompleteRecipes = finalRecipes.filter(recipe => !recipe.anchor || !recipe.celebration);
+            if (incompleteRecipes.length > 0) {
+                alert(`还有 ${incompleteRecipes.length} 个配方未完成，请为所有黄金行为选择锚点和庆祝方式`);
+                return;
+            }
+
+            displayFinalResults();
+            goToPage(5);
+        }
+
+        // 显示最终结果
+        function displayFinalResults() {
+            document.getElementById('finalWish').textContent = userWish;
+            const container = document.getElementById('finalRecipeContainer');
+            
+            container.innerHTML = finalRecipes.map((recipe, index) => `
+                <div class="final-recipe">
+                    <h3>💎 黄金行为 ${index + 1}</h3>
+                    <div class="recipe-formula">
+                        ${recipe.anchor}，我会<strong>${recipe.behavior}</strong>，为了让大脑牢记这个习惯，我会<strong>${recipe.celebration}</strong>。
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 浮动控件管理
+        function updateFloatingControls(type, count, progress, canProceed) {
+            const floatingControls = document.getElementById('floatingControls');
+            const floatingCount = document.getElementById('floatingCount');
+            const floatingProgressFill = document.getElementById('floatingProgressFill');
+            const floatingNextBtn = document.getElementById('floatingNextBtn');
+
+            if (currentPage === 2 || currentPage === 3) {
+                floatingControls.classList.add('show');
+                
+                if (type === 'willing') {
+                    floatingCount.textContent = `已选择：${count} / 10个（最少）`;
+                    floatingNextBtn.textContent = '进入能力筛选';
+                } else if (type === 'able') {
+                    floatingCount.textContent = `已选择：${count} 个黄金行为`;
+                    floatingNextBtn.textContent = '生成习惯配方';
+                }
+                
+                floatingProgressFill.style.width = progress + '%';
+                floatingNextBtn.disabled = !canProceed;
+            } else {
+                floatingControls.classList.remove('show');
+            }
+        }
+
+        // 浮动按钮的下一步函数
+        function proceedToNext() {
+            if (currentPage === 2) {
+                proceedToAbility();
+            } else if (currentPage === 3) {
+                proceedToRecipe();
+            }
+        }
+
+        // 更新页面导航函数
+        function goToPage(pageNumber) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById(`page-${pageNumber}`).classList.add('active');
+            currentPage = pageNumber;
+            
+            // 控制浮动控件显示
+            if (pageNumber === 2 && selectedWillingBehaviors.length > 0) {
+                updateFloatingControls('willing', selectedWillingBehaviors.length, 
+                    Math.min(selectedWillingBehaviors.length / 10 * 100, 100), 
+                    selectedWillingBehaviors.length >= 10);
+            } else if (pageNumber === 3 && selectedAbleBehaviors.length > 0) {
+                updateFloatingControls('able', selectedAbleBehaviors.length, 
+                    selectedAbleBehaviors.length / selectedWillingBehaviors.length * 100, 
+                    selectedAbleBehaviors.length > 0);
+            } else {
+                document.getElementById('floatingControls').classList.remove('show');
+            }
+        }
+
+        // 获取初始锚点（智能匹配）
+        function getInitialAnchors(behavior, defaultAnchors) {
+            if (typeof getBackupDataSmart === 'function') {
+                const smartAnchors = getBackupDataSmart('anchors', '', behavior);
+                return smartAnchors.slice(0, 5);
+            } else {
+                return defaultAnchors.slice(0, 5);
+            }
+        }
+
+        // 获取初始庆祝方式（智能匹配）
+        function getInitialCelebrations(behavior, defaultCelebrations) {
+            if (typeof getBackupDataSmart === 'function') {
+                const smartCelebrations = getBackupDataSmart('celebrations', '', behavior);
+                return smartCelebrations.slice(0, 5);
+            } else {
+                return defaultCelebrations.slice(0, 5);
+            }
+        }
+
+        // 重新开始流程
+        function restartProcess() {
+            if (confirm('确定要重新开始吗？当前的配方将会丢失。')) {
+                // 重置所有数据
+                userWish = '';
+                allBehaviors = [];
+                selectedWillingBehaviors = [];
+                selectedAbleBehaviors = [];
+                finalRecipes = [];
+                currentBehaviorPage = 0;
+                
+                // 清空输入框
+                document.getElementById('wishInput').value = '';
+                
+                // 重置计数器
+                document.getElementById('willingCount').textContent = '0';
+                document.getElementById('ableCount').textContent = '0';
+                
+                // 重置进度条
+                document.getElementById('progressFill1').style.width = '0%';
+                document.getElementById('progressFill2').style.width = '0%';
+                
+                // 隐藏浮动控件
+                document.getElementById('floatingControls').classList.remove('show');
+                
+                // 回到第一页
+                goToPage(1);
+            }
+        }
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 检查是否支持API调用
+            console.log('AI微习惯工具箱已加载');
+            
+            // 添加输入验证
+            document.getElementById('wishInput').addEventListener('input', function(e) {
+                const value = e.target.value;
+                if (value.length > 200) {
+                    e.target.value = value.substring(0, 200);
+                }
+            });
+        });
+    </script>
+    
+    <!-- 引入配置文件 -->
+    <script src="config.js"></script>
+</body>
+</html> 
