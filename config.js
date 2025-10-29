@@ -1,14 +1,12 @@
-// 豆包（Doubao / 火山方舟）API 配置文件
+// DeepSeek API 配置文件
 // 请根据你的实际情况修改以下配置
 
 const CONFIG = {
-    // 豆包 API 设置（Ark v3 Chat Completions）
+    // DeepSeek API 设置
     API: {
-        // 说明：用户提供的 Base URL 为 https://ark.cn-beijing.volces.com/api/v3
-        // Ark Chat Completions 的完整路径为 /chat/completions，这里直接拼接完整可调用地址
-        baseURL: 'https://ark.cn-beijing.volces.com/api/v3/chat/completions',
-        apiKey: 'c7e6338f-13d0-4c05-9a5a-8c888a79d2ff', // 豆包 API Key（由用户提供）
-        model: 'doubao-1.5-lite-32k',
+        baseURL: 'https://api.deepseek.com/v1/chat/completions',
+        apiKey: 'sk-0c8e1c27321c4ac6b9bd45df3641e314', // 请替换为你的实际API Key
+        model: 'deepseek-chat',
         maxTokens: 1000,
         temperature: 0.7
     },
@@ -185,9 +183,8 @@ function parseResponse(content, type) {
     }
 }
 
-// 实际的API调用函数（豆包 Ark v3 Chat Completions）
-// 说明：保持调用签名不变以兼容现有调用点，但函数名改为 callDoubaoAPI
-async function callDoubaoAPI(prompt, type = 'behaviors') {
+// 实际的API调用函数（替换模拟函数）
+async function callDeepSeekAPI(prompt, type = 'behaviors') {
     try {
         // 构建完整的提示词
         const fullPrompt = getSystemPrompt(type).replace('{userWish}', prompt);

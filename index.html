@@ -647,18 +647,12 @@
             document.getElementById('loading-page').classList.add('active');
         }
 
-        // 模拟与豆包 API 的交互（实际使用时优先调用 config.js 中的 callDoubaoAPI）
-        async function callDoubaoAPI(prompt, type = 'behaviors') {
+        // 模拟与DeepSeek API的交互（实际使用时需要连接真实API）
+        async function callDeepSeekAPI(prompt, type = 'behaviors') {
             // 模拟API调用延迟
             await new Promise(resolve => setTimeout(resolve, 2000));
             
             // 如果配置文件中的API函数可用，使用它
-            if (typeof CONFIG !== 'undefined' && typeof callDoubaoAPI === 'function' && window.callDoubaoAPI !== arguments.callee) {
-                // 若全局已由 config.js 定义真实的 callDoubaoAPI，则直接调用真实接口
-                return window.callDoubaoAPI(prompt, type);
-            }
-
-            // 回退到本地备用数据
             if (typeof CONFIG !== 'undefined' && typeof getBackupData === 'function') {
                 return getBackupData(type, prompt);
             }
@@ -783,7 +777,7 @@
 
             try {
                 // 调用AI生成行为方案
-                allBehaviors = await callDoubaoAPI(userWish, 'behaviors');
+                allBehaviors = await callDeepSeekAPI(userWish, 'behaviors');
                 currentBehaviorPage = 0;
                 selectedWillingBehaviors = [];
                 
@@ -962,8 +956,8 @@
 
             try {
                 // 生成锚点和庆祝选项
-                const anchors = await callDoubaoAPI('', 'anchors');
-                const celebrations = await callDoubaoAPI('', 'celebrations');
+                const anchors = await callDeepSeekAPI('', 'anchors');
+                const celebrations = await callDeepSeekAPI('', 'celebrations');
                 
                 await displayRecipeGeneration(anchors, celebrations);
                 goToPage(4);
@@ -1082,7 +1076,7 @@
                 
                 // 获取黄金行为用于生成针对性锚点
                 const currentBehavior = finalRecipes[recipeIndex].behavior;
-                const anchors = await callDoubaoAPI(currentBehavior, 'anchors');
+                const anchors = await callDeepSeekAPI(currentBehavior, 'anchors');
                 
                 // 使用智能匹配获取针对性锚点
                 let availableAnchors;
@@ -1126,7 +1120,7 @@
                 
                 // 获取黄金行为用于生成针对性庆祝
                 const currentBehavior = finalRecipes[recipeIndex].behavior;
-                const celebrations = await callDoubaoAPI(currentBehavior, 'celebrations');
+                const celebrations = await callDeepSeekAPI(currentBehavior, 'celebrations');
                 
                 // 使用智能匹配获取针对性庆祝方式
                 let availableCelebrations;

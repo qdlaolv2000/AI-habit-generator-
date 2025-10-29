@@ -1,11 +1,11 @@
 # AI微习惯工具箱
 
-基于福格行为设计模型的智能习惯养成工具，结合豆包 AI 生成个性化的微习惯配方。
+基于福格行为设计模型的智能习惯养成工具，结合DeepSeek AI生成个性化的微习惯配方。
 
 ## 🌟 功能特点
 
 - **科学依据**: 基于斯坦福大学福格行为设计模型（B=MAP）
-- **AI驱动**: 集成豆包（火山方舟 Ark）生成个性化行为方案
+- **AI驱动**: 集成DeepSeek生成个性化行为方案
 - **移动友好**: 响应式设计，完美适配手机端
 - **循序渐进**: 7步科学流程，从愿望到习惯配方
 - **可定制**: 支持自定义锚点和庆祝方式
@@ -26,21 +26,21 @@ open index.html  # macOS
 start index.html  # Windows
 ```
 
-### 2. 集成豆包 API（Ark v3 Chat Completions）
+### 2. 集成DeepSeek API
 
-目前工具默认集成豆包 API，在`config.js`中配置`API.baseURL`、`API.apiKey`与`API.model`，并通过`callDoubaoAPI`函数调用：
+目前工具使用模拟数据，要集成真实的DeepSeek API，需要修改JavaScript中的`callDeepSeekAPI`函数：
 
 ```javascript
 // 替换模拟API调用
-async function callDoubaoAPI(prompt, type = 'behaviors') {
-    const response = await fetch('https://ark.cn-beijing.volces.com/api/v3/chat/completions', {
+async function callDeepSeekAPI(prompt, type = 'behaviors') {
+    const response = await fetch('https://api.deepseek.com/v1/chat/completions', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${YOUR_API_KEY}`
         },
         body: JSON.stringify({
-            model: 'doubao-1.5-lite-32k',
+            model: 'deepseek-chat',
             messages: [
                 {
                     role: 'system',
@@ -206,7 +206,7 @@ return [
 - **HTML5**: 页面结构
 - **CSS3**: 响应式样式设计
 - **JavaScript**: 交互逻辑和状态管理
-- **豆包 API（Ark v3）**: AI内容生成
+- **DeepSeek API**: AI内容生成
 
 ## 📱 移动端适配
 
@@ -236,5 +236,5 @@ return [
 ## 🙏 致谢
 
 - 感谢斯坦福大学福格行为设计实验室的研究成果
-- 感谢豆包（火山方舟）提供的AI能力支持
+- 感谢DeepSeek提供的AI能力支持
 - 感谢所有为微习惯研究做出贡献的研究者们 
