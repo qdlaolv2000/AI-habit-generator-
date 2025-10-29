@@ -152,13 +152,13 @@
             <p>首先检查你的API配置是否正确：</p>
             
             <div class="input-group">
-                <label for="apiKey">DeepSeek API Key:</label>
+                <label for="apiKey">豆包 API Key:</label>
                 <input type="password" id="apiKey" placeholder="请输入你的API密钥">
             </div>
             
             <div class="input-group">
                 <label for="baseUrl">API Base URL:</label>
-                <input type="text" id="baseUrl" value="https://api.deepseek.com/v1/chat/completions" readonly>
+                <input type="text" id="baseUrl" value="https://ark.cn-beijing.volces.com/api/v3/chat/completions" readonly>
             </div>
             
             <button class="btn" onclick="testConnection()">测试连接</button>
@@ -235,7 +235,7 @@
                         'Authorization': `Bearer ${apiKey}`
                     },
                     body: JSON.stringify({
-                        model: 'deepseek-chat',
+                        model: 'doubao-1.5-lite-32k',
                         messages: [
                             {
                                 role: 'system',
@@ -292,7 +292,7 @@
                         'Authorization': `Bearer ${currentApiKey}`
                     },
                     body: JSON.stringify({
-                        model: 'deepseek-chat',
+                        model: 'doubao-1.5-lite-32k',
                         messages: [
                             {
                                 role: 'system',
@@ -344,7 +344,7 @@
                         'Authorization': `Bearer ${currentApiKey}`
                     },
                     body: JSON.stringify({
-                        model: 'deepseek-chat',
+                        model: 'doubao-1.5-lite-32k',
                         messages: [
                             {
                                 role: 'user',
@@ -392,7 +392,7 @@
                         'Authorization': `Bearer ${currentApiKey}`
                     },
                     body: JSON.stringify({
-                        model: 'deepseek-chat',
+                        model: 'doubao-1.5-lite-32k',
                         messages: [
                             {
                                 role: 'user',

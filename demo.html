@@ -279,7 +279,7 @@
                 <div class="feature-card">
                     <div class="feature-icon">🤖</div>
                     <div class="feature-title">AI智能</div>
-                    <div class="feature-desc">集成DeepSeek AI，根据你的愿望生成个性化的行为方案</div>
+                    <div class="feature-desc">集成豆包 AI，根据你的愿望生成个性化的行为方案</div>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">📱</div>
@@ -400,19 +400,19 @@
         <div class="demo-section">
             <h2>⚙️ 技术实现</h2>
             
-            <h3>DeepSeek API集成</h3>
-            <p>工具使用DeepSeek API来生成个性化的行为建议，以下是集成示例：</p>
+            <h3>豆包 API 集成</h3>
+            <p>工具使用豆包（火山方舟 Ark v3）API 来生成个性化的行为建议，以下是集成示例：</p>
             
             <div class="code-block">
-async function callDeepSeekAPI(prompt, type = 'behaviors') {
-    const response = await fetch('https://api.deepseek.com/v1/chat/completions', {
+async function callDoubaoAPI(prompt, type = 'behaviors') {
+    const response = await fetch('https://ark.cn-beijing.volces.com/api/v3/chat/completions', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${YOUR_API_KEY}`
         },
         body: JSON.stringify({
-            model: 'deepseek-chat',
+            model: 'doubao-1.5-lite-32k',
             messages: [
                 {
                     role: 'system',
@@ -444,13 +444,13 @@ async function callDeepSeekAPI(prompt, type = 'behaviors') {
         <div class="demo-section">
             <h2>📚 使用指南</h2>
             
-            <h3>1. 配置DeepSeek API</h3>
+            <h3>1. 配置豆包 API</h3>
             <p>在 <code>config.js</code> 文件中设置你的API密钥：</p>
             <div class="code-block">
 // 修改以下配置
 const CONFIG = {
     API: {
-        apiKey: 'YOUR_DEEPSEEK_API_KEY_HERE', // 替换为你的API密钥
+        apiKey: 'YOUR_DOUBAO_API_KEY_HERE', // 替换为你的API密钥
         // ... 其他配置
     }
 };
