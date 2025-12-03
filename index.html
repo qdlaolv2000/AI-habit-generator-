@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -40,8 +41,15 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         h1 {
@@ -90,7 +98,8 @@
             color: #4a5568;
         }
 
-        input[type="text"], textarea {
+        input[type="text"],
+        textarea {
             width: 100%;
             padding: 12px;
             border: 2px solid #e2e8f0;
@@ -99,7 +108,8 @@
             transition: border-color 0.3s ease;
         }
 
-        input[type="text"]:focus, textarea:focus {
+        input[type="text"]:focus,
+        textarea:focus {
             outline: none;
             border-color: #4299e1;
         }
@@ -245,8 +255,13 @@
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         .final-recipe {
@@ -299,7 +314,8 @@
             color: #92400e;
         }
 
-        .anchor-option, .celebration-option {
+        .anchor-option,
+        .celebration-option {
             background: #f8f9fa;
             border: 2px solid #e9ecef;
             border-radius: 8px;
@@ -309,11 +325,13 @@
             transition: all 0.3s ease;
         }
 
-        .anchor-option:hover, .celebration-option:hover {
+        .anchor-option:hover,
+        .celebration-option:hover {
             border-color: #4299e1;
         }
 
-        .anchor-option.selected, .celebration-option.selected {
+        .anchor-option.selected,
+        .celebration-option.selected {
             border-color: #48bb78;
             background: #f0fff4;
         }
@@ -343,8 +361,15 @@
         }
 
         @keyframes slideUp {
-            from { transform: translateY(100px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+            from {
+                transform: translateY(100px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
 
         .floating-count {
@@ -401,7 +426,8 @@
             .page {
                 margin: 10px 5px;
                 padding: 20px;
-                padding-bottom: 120px; /* 为浮动控件留出空间 */
+                padding-bottom: 120px;
+                /* 为浮动控件留出空间 */
             }
 
             h1 {
@@ -437,13 +463,14 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <!-- 第一页：欢迎页面和愿望输入 -->
         <div class="page active" id="page-1">
             <h1>🌟 AI微习惯工具箱</h1>
             <div class="subtitle">基于福格行为设计模型 - 科学养成好习惯</div>
-            
+
             <div class="tip-box">
                 <h3>💡 什么是有效愿望？</h3>
                 <p><strong>有效愿望应该：</strong></p>
@@ -469,11 +496,7 @@
 
             <div class="input-group">
                 <label for="wishInput">请输入你的愿望：</label>
-                <textarea 
-                    id="wishInput" 
-                    placeholder="例如：我想提高睡眠质量，让自己每天都精力充沛..."
-                    maxlength="200"
-                ></textarea>
+                <textarea id="wishInput" placeholder="例如：我想提高睡眠质量，让自己每天都精力充沛..." maxlength="200"></textarea>
                 <small style="color: #718096;">建议20-200字，描述你真正想要实现的愿望</small>
             </div>
 
@@ -486,7 +509,7 @@
         <div class="page" id="page-2">
             <h2>第一步：选择你愿意做的行为</h2>
             <div class="subtitle">AI根据你的愿望生成了以下行为建议，选择你愿意尝试的（至少选择10个）</div>
-            
+
             <div class="tip-box">
                 <h3>💡 选择标准</h3>
                 <p>以下每个行为都是为了帮助你实现"<strong><span id="currentWish"></span></strong>"这个愿望而精心设计的。请选择那些你觉得：</p>
@@ -496,7 +519,7 @@
                     <li>符合你生活方式的行为</li>
                 </ul>
             </div>
-            
+
             <div class="count-indicator">
                 已选择：<span id="willingCount">0</span> / 10个（最少）
             </div>
@@ -522,7 +545,7 @@
         <div class="page" id="page-3">
             <h2>第二步：选择你能做到的行为</h2>
             <div class="subtitle">从你刚才选择的行为中，选出你确实有能力完成的</div>
-            
+
             <div class="tip-box">
                 <h3>💪 能力评估维度：</h3>
                 <ul style="margin-left: 20px; margin-top: 10px;">
@@ -558,7 +581,7 @@
         <div class="page" id="page-4">
             <h2>第三步：为你的黄金行为生成习惯配方</h2>
             <div class="subtitle">根据福格行为设计模型，为每个黄金行为定制专属配方</div>
-            
+
             <div class="tip-box">
                 <h3>🎯 微习惯配方公式：</h3>
                 <p><strong>在我[锚点]之后，我会[微行为]，为了让大脑牢记这个习惯，我会[庆祝]。</strong></p>
@@ -580,7 +603,7 @@
         <div class="page" id="page-5">
             <h1>🎉 你的微习惯养成方案</h1>
             <div class="subtitle">为了实现：<span id="finalWish"></span></div>
-            
+
             <div class="tip-box">
                 <h3>🌟 使用说明：</h3>
                 <ul style="margin-left: 20px; margin-top: 10px;">
@@ -647,16 +670,16 @@
             document.getElementById('loading-page').classList.add('active');
         }
 
-        // 模拟与DeepSeek API的交互（实际使用时需要连接真实API）
-        async function callDeepSeekAPI(prompt, type = 'behaviors') {
+        // 模拟与AI API的交互（实际使用时需要连接真实API）
+        async function callAIAPI(prompt, type = 'behaviors') {
             // 模拟API调用延迟
             await new Promise(resolve => setTimeout(resolve, 2000));
-            
+
             // 如果配置文件中的API函数可用，使用它
             if (typeof CONFIG !== 'undefined' && typeof getBackupData === 'function') {
                 return getBackupData(type, prompt);
             }
-            
+
             // 否则使用本地模拟函数
             if (type === 'behaviors') {
                 return generateMockBehaviors(prompt);
@@ -701,7 +724,7 @@
                 "每天早上起床后拉开窗帘",
                 "每次吃饭前说一句感谢",
             ];
-            
+
             // 随机选择和打乱顺序
             return behaviorTemplates.sort(() => Math.random() - 0.5);
         }
@@ -761,7 +784,7 @@
         // 开始生成行为方案
         async function startBehaviorGeneration() {
             const wishInput = document.getElementById('wishInput').value.trim();
-            
+
             if (!wishInput) {
                 alert('请输入你的愿望！');
                 return;
@@ -777,15 +800,15 @@
 
             try {
                 // 调用AI生成行为方案
-                allBehaviors = await callDeepSeekAPI(userWish, 'behaviors');
+                allBehaviors = await callAIAPI(userWish, 'behaviors');
                 currentBehaviorPage = 0;
                 selectedWillingBehaviors = [];
-                
-                        // 显示行为选择页面
-        displayBehaviors();
-        // 在第二页显示用户愿望
-        document.getElementById('currentWish').textContent = userWish;
-        goToPage(2);
+
+                // 显示行为选择页面
+                displayBehaviors();
+                // 在第二页显示用户愿望
+                document.getElementById('currentWish').textContent = userWish;
+                goToPage(2);
             } catch (error) {
                 console.error('生成行为方案失败:', error);
                 alert('生成方案失败，请重试');
@@ -804,10 +827,10 @@
                 container.innerHTML = '';
             }
 
-                    behaviorsBatch.forEach((behavior, index) => {
-            const behaviorDiv = document.createElement('div');
-            behaviorDiv.className = 'behavior-item';
-            behaviorDiv.innerHTML = `
+            behaviorsBatch.forEach((behavior, index) => {
+                const behaviorDiv = document.createElement('div');
+                behaviorDiv.className = 'behavior-item';
+                behaviorDiv.innerHTML = `
                 <div class="behavior-header">
                     <span class="behavior-tag">🎯 为你的愿望定制</span>
                 </div>
@@ -818,8 +841,8 @@
                     </button>
                 </div>
             `;
-            container.appendChild(behaviorDiv);
-        });
+                container.appendChild(behaviorDiv);
+            });
 
             updateWillingCount();
         }
@@ -828,7 +851,7 @@
         function toggleWillingBehavior(index, button) {
             const behavior = allBehaviors[index];
             const behaviorItem = button.closest('.behavior-item');
-            
+
             if (selectedWillingBehaviors.includes(behavior)) {
                 selectedWillingBehaviors = selectedWillingBehaviors.filter(b => b !== behavior);
                 button.classList.remove('selected');
@@ -838,7 +861,7 @@
                 button.classList.add('selected');
                 behaviorItem.classList.add('selected');
             }
-            
+
             updateWillingCount();
         }
 
@@ -846,10 +869,10 @@
         function updateWillingCount() {
             const count = selectedWillingBehaviors.length;
             document.getElementById('willingCount').textContent = count;
-            
+
             const progress = Math.min(count / 10 * 100, 100);
             document.getElementById('progressFill1').style.width = progress + '%';
-            
+
             const proceedBtn = document.getElementById('proceedBtn1');
             if (count >= 10) {
                 proceedBtn.disabled = false;
@@ -912,7 +935,7 @@
         function toggleAbleBehavior(index, button) {
             const behavior = selectedWillingBehaviors[index];
             const behaviorItem = button.closest('.behavior-item');
-            
+
             if (selectedAbleBehaviors.includes(behavior)) {
                 selectedAbleBehaviors = selectedAbleBehaviors.filter(b => b !== behavior);
                 button.classList.remove('selected');
@@ -922,7 +945,7 @@
                 button.classList.add('selected');
                 behaviorItem.classList.add('selected');
             }
-            
+
             updateAbleCount();
         }
 
@@ -930,10 +953,10 @@
         function updateAbleCount() {
             const count = selectedAbleBehaviors.length;
             document.getElementById('ableCount').textContent = count;
-            
+
             const progress = count / selectedWillingBehaviors.length * 100;
             document.getElementById('progressFill2').style.width = progress + '%';
-            
+
             const proceedBtn = document.getElementById('proceedBtn2');
             if (count > 0) {
                 proceedBtn.disabled = false;
@@ -956,9 +979,9 @@
 
             try {
                 // 生成锚点和庆祝选项
-                const anchors = await callDeepSeekAPI('', 'anchors');
-                const celebrations = await callDeepSeekAPI('', 'celebrations');
-                
+                const anchors = await callAIAPI('', 'anchors');
+                const celebrations = await callAIAPI('', 'celebrations');
+
                 await displayRecipeGeneration(anchors, celebrations);
                 goToPage(4);
             } catch (error) {
@@ -1031,10 +1054,10 @@
             document.querySelectorAll(`#anchors-${recipeIndex} .anchor-option`).forEach(el => {
                 el.classList.remove('selected');
             });
-            
+
             // 选择新的锚点
             document.querySelector(`#anchors-${recipeIndex} .anchor-option:nth-child(${anchorIndex + 1})`).classList.add('selected');
-            
+
             finalRecipes[recipeIndex].anchor = anchor;
             updateRecipeFormula(recipeIndex);
         }
@@ -1045,10 +1068,10 @@
             document.querySelectorAll(`#celebrations-${recipeIndex} .celebration-option`).forEach(el => {
                 el.classList.remove('selected');
             });
-            
+
             // 选择新的庆祝方式
             document.querySelector(`#celebrations-${recipeIndex} .celebration-option:nth-child(${celebrationIndex + 1})`).classList.add('selected');
-            
+
             finalRecipes[recipeIndex].celebration = celebration;
             updateRecipeFormula(recipeIndex);
         }
@@ -1057,7 +1080,7 @@
         function updateRecipeFormula(recipeIndex) {
             const recipe = finalRecipes[recipeIndex];
             const formulaEl = document.getElementById(`recipe-text-${recipeIndex}`);
-            
+
             if (recipe.anchor && recipe.celebration) {
                 formulaEl.innerHTML = `${recipe.anchor}，我会<strong>${recipe.behavior}</strong>，为了让大脑牢记这个习惯，我会<strong>${recipe.celebration}</strong>。`;
             } else if (recipe.anchor) {
@@ -1073,11 +1096,11 @@
                 // 先显示加载状态
                 const container = document.getElementById(`anchors-${recipeIndex}`);
                 container.innerHTML = '<div style="text-align: center; padding: 20px; color: #718096;">正在生成新的锚点选项...</div>';
-                
+
                 // 获取黄金行为用于生成针对性锚点
                 const currentBehavior = finalRecipes[recipeIndex].behavior;
-                const anchors = await callDeepSeekAPI(currentBehavior, 'anchors');
-                
+                const anchors = await callAIAPI(currentBehavior, 'anchors');
+
                 // 使用智能匹配获取针对性锚点
                 let availableAnchors;
                 if (typeof getBackupDataSmart === 'function') {
@@ -1085,11 +1108,11 @@
                 } else {
                     availableAnchors = anchors;
                 }
-                
+
                 // 随机打乱并选择5个
                 const shuffled = availableAnchors.sort(() => 0.5 - Math.random());
                 const selectedAnchors = shuffled.slice(0, 5);
-                
+
                 container.innerHTML = selectedAnchors.map((anchor, j) => `
                     <div class="anchor-option" onclick="selectAnchor(${recipeIndex}, ${j}, '${anchor}')">
                         ${anchor}
@@ -1099,7 +1122,7 @@
                 console.error('刷新锚点失败:', error);
                 // 使用备用锚点
                 const backupAnchors = [
-                    "在我起床下床之后", "在我刷完牙之后", "在我洗完脸之后", 
+                    "在我起床下床之后", "在我刷完牙之后", "在我洗完脸之后",
                     "在我吃完早餐之后", "在我打开电脑之后"
                 ];
                 const container = document.getElementById(`anchors-${recipeIndex}`);
@@ -1117,11 +1140,11 @@
                 // 先显示加载状态
                 const container = document.getElementById(`celebrations-${recipeIndex}`);
                 container.innerHTML = '<div style="text-align: center; padding: 20px; color: #718096;">正在生成新的庆祝选项...</div>';
-                
+
                 // 获取黄金行为用于生成针对性庆祝
                 const currentBehavior = finalRecipes[recipeIndex].behavior;
-                const celebrations = await callDeepSeekAPI(currentBehavior, 'celebrations');
-                
+                const celebrations = await callAIAPI(currentBehavior, 'celebrations');
+
                 // 使用智能匹配获取针对性庆祝方式
                 let availableCelebrations;
                 if (typeof getBackupDataSmart === 'function') {
@@ -1129,11 +1152,11 @@
                 } else {
                     availableCelebrations = celebrations;
                 }
-                
+
                 // 随机打乱并选择5个
                 const shuffled = availableCelebrations.sort(() => 0.5 - Math.random());
                 const selectedCelebrations = shuffled.slice(0, 5);
-                
+
                 container.innerHTML = selectedCelebrations.map((celebration, j) => `
                     <div class="celebration-option" onclick="selectCelebration(${recipeIndex}, ${j}, '${celebration}')">
                         ${celebration}
@@ -1143,7 +1166,7 @@
                 console.error('刷新庆祝方式失败:', error);
                 // 使用备用庆祝方式
                 const backupCelebrations = [
-                    "在心里说'太棒了！'", "微笑并点头", "握拳做胜利手势", 
+                    "在心里说'太棒了！'", "微笑并点头", "握拳做胜利手势",
                     "深呼吸一次", "给自己点个赞"
                 ];
                 const container = document.getElementById(`celebrations-${recipeIndex}`);
@@ -1172,7 +1195,7 @@
         function displayFinalResults() {
             document.getElementById('finalWish').textContent = userWish;
             const container = document.getElementById('finalRecipeContainer');
-            
+
             container.innerHTML = finalRecipes.map((recipe, index) => `
                 <div class="final-recipe">
                     <h3>💎 黄金行为 ${index + 1}</h3>
@@ -1192,7 +1215,7 @@
 
             if (currentPage === 2 || currentPage === 3) {
                 floatingControls.classList.add('show');
-                
+
                 if (type === 'willing') {
                     floatingCount.textContent = `已选择：${count} / 10个（最少）`;
                     floatingNextBtn.textContent = '进入能力筛选';
@@ -1200,7 +1223,7 @@
                     floatingCount.textContent = `已选择：${count} 个黄金行为`;
                     floatingNextBtn.textContent = '生成习惯配方';
                 }
-                
+
                 floatingProgressFill.style.width = progress + '%';
                 floatingNextBtn.disabled = !canProceed;
             } else {
@@ -1224,15 +1247,15 @@
             });
             document.getElementById(`page-${pageNumber}`).classList.add('active');
             currentPage = pageNumber;
-            
+
             // 控制浮动控件显示
             if (pageNumber === 2 && selectedWillingBehaviors.length > 0) {
-                updateFloatingControls('willing', selectedWillingBehaviors.length, 
-                    Math.min(selectedWillingBehaviors.length / 10 * 100, 100), 
+                updateFloatingControls('willing', selectedWillingBehaviors.length,
+                    Math.min(selectedWillingBehaviors.length / 10 * 100, 100),
                     selectedWillingBehaviors.length >= 10);
             } else if (pageNumber === 3 && selectedAbleBehaviors.length > 0) {
-                updateFloatingControls('able', selectedAbleBehaviors.length, 
-                    selectedAbleBehaviors.length / selectedWillingBehaviors.length * 100, 
+                updateFloatingControls('able', selectedAbleBehaviors.length,
+                    selectedAbleBehaviors.length / selectedWillingBehaviors.length * 100,
                     selectedAbleBehaviors.length > 0);
             } else {
                 document.getElementById('floatingControls').classList.remove('show');
@@ -1269,33 +1292,33 @@
                 selectedAbleBehaviors = [];
                 finalRecipes = [];
                 currentBehaviorPage = 0;
-                
+
                 // 清空输入框
                 document.getElementById('wishInput').value = '';
-                
+
                 // 重置计数器
                 document.getElementById('willingCount').textContent = '0';
                 document.getElementById('ableCount').textContent = '0';
-                
+
                 // 重置进度条
                 document.getElementById('progressFill1').style.width = '0%';
                 document.getElementById('progressFill2').style.width = '0%';
-                
+
                 // 隐藏浮动控件
                 document.getElementById('floatingControls').classList.remove('show');
-                
+
                 // 回到第一页
                 goToPage(1);
             }
         }
 
         // 初始化
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // 检查是否支持API调用
             console.log('AI微习惯工具箱已加载');
-            
+
             // 添加输入验证
-            document.getElementById('wishInput').addEventListener('input', function(e) {
+            document.getElementById('wishInput').addEventListener('input', function (e) {
                 const value = e.target.value;
                 if (value.length > 200) {
                     e.target.value = value.substring(0, 200);
@@ -1303,8 +1326,9 @@
             });
         });
     </script>
-    
+
     <!-- 引入配置文件 -->
     <script src="config.js"></script>
 </body>
-</html> 
+
+</html>
